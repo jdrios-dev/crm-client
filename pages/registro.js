@@ -61,7 +61,7 @@ const Registro = () => {
               nombre,
               apellido,
               email,
-              password 
+              password
             }
           }
         });
