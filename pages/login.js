@@ -45,7 +45,7 @@ const login = () => {
           }
         });
         const {token} = data.autenticarUsuario;
-        localStorage.setItem('token', token);
+        localStorage.setItem('token-crm', token);
         router.push('/');
       } catch (error) {
         setMensaje(error.message);

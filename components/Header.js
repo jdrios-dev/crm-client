@@ -26,7 +26,7 @@ const Header = () => {
   const { nombre, apellido } = data.obtenerUsuario;
 
   const cerrarSesion = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('token-crm');
     router.push('/login');
   }
 

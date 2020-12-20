@@ -3,47 +3,45 @@ import Swal from 'sweetalert2';
 import Router from 'next/router';
 import { gql, useMutation } from '@apollo/client';
 
-const ELIMINAR_CLIENTE =  gql`
-  mutation eliminarCliente($id: ID!){
-    eliminarCliente(id: $id)
+const ELIMINAR_PRODUCTO = gql`
+  mutation eliminarProducto($id: ID!){
+    eliminarProducto(id: $id)
   }
 `;
-const OBTENER_CLIENTES_USUARIO = gql `
-  query obtenerClientesVendedor {
-    obtenerClientesVendedor {
+
+const OBTENER_PRODUCTOS = gql `
+  query obtenerProductos{
+    obtenerProductos {
       id
       nombre
-      apellido
-      empresa
-      email
+      precio
+      existencia
     }
   }
 `;
 
-const Cliente = ({cliente}) => {
+const Producto = ({producto}) => {
 
-  const [ eliminarCliente ] = useMutation(ELIMINAR_CLIENTE, {
+  const {nombre, existencia, precio, id} = producto;
+
+  const [eliminarProducto] = useMutation(ELIMINAR_PRODUCTO, {
     update(cache){
-      const { obtenerClientesVendedor } = cache.readQuery({ query: OBTENER_CLIENTES_USUARIO });
+      const { obtenerProductos } = cache.readQuery({
+        query: OBTENER_PRODUCTOS
+      });
 
       cache.writeQuery({
-        query: OBTENER_CLIENTES_USUARIO,
+        query: OBTENER_PRODUCTOS,
         data: {
-          obtenerClientesVendedor : obtenerClientesVendedor.filter(
-            clienteActual => clienteActual.id !== id)
+          obtenerProductos: obtenerProductos.filter( productoActual => productoActual.id !== id)
         }
       })
     }
   });
 
-  const {
-    id,
-    apellido,
-    nombre,
-    empresa,
-    email} = cliente;
+  
 
-  const confirmarEliminarCliente = () => {
+  const confirmarEliminarProducto = () => {
     Swal.fire({
       title: '¿Estas seguro?',
       text: "No podras revertir esta acción!",
@@ -54,44 +52,40 @@ const Cliente = ({cliente}) => {
       confirmButtonText: 'Si, Eliminar!',
       cancelButtonText: 'No, Cancelar!'
     }).then( async (result) => {
-      if (result.isConfirmed) {
+      if (result.value) {
         try {
-          const {data} = await eliminarCliente({
+          const { data } = await eliminarProducto({
             variables: {
               id
             }
           });
           Swal.fire(
-            'Eliminado!',
-            data.eliminarCliente,
+            'Correcto',
+            data.eliminarProducto,
             'success'
           )
         } catch (error) {
-          Swal.fire(
-            'Error!',
-            'No se pudo eliminar el cliente',
-            'error'
-          )
+          console.log(error);
         }
       }
     })
   }
 
-  const editarCliente = () => {
+  const editaProducto = () => {
     Router.push({
-      pathname: '/editarcliente/[id]',
+      pathname: '/editarproducto/[id]',
       query: { id }
     })
   }
 
   return (
     <tr >
-      <td className='border px-4 py-2'>{nombre} {apellido}</td>
-      <td className='border px-4 py-2'>{empresa}</td>
-      <td className='border px-4 py-2'>{email}</td>
+      <td className='border px-4 py-2'>{nombre} </td>
+      <td className='border px-4 py-2'>{existencia}</td>
+      <td className='border px-4 py-2'>$ {precio}</td>
       <td className='border px-4 py-2'>
         <button
-          onClick={() => confirmarEliminarCliente()}
+          onClick={() => confirmarEliminarProducto()}
           type='button'
           className='flex items-center bg-red-400 text-white rounded p-1 align-middle hover:bg-red-500 cursor-pointer'>
           Eliminar
@@ -112,7 +106,7 @@ const Cliente = ({cliente}) => {
       </td>
       <td className='border px-4 py-2'>
         <button
-          onClick={() => editarCliente()}
+          onClick={() => editaProducto()}
           type='button'
           className='flex items-center bg-green-400 text-white rounded p-1 align-middle hover:bg-green-500 cursor-pointer'>
           Editar
@@ -135,4 +129,4 @@ const Cliente = ({cliente}) => {
   )
 }
 
-export default Cliente;
+export default Producto;
