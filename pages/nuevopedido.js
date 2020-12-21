@@ -21,13 +21,50 @@ const NuevoPedido = () => {
     }
   `;
 
+  const OBTENER_PEDIDOS = gql`
+  query obtenerPedidosVendedor {
+    obtenerPedidosVendedor {
+      id
+      pedido {
+        id
+        cantidad
+        nombre
+      }
+      cliente {
+        id
+        nombre
+        apellido
+        empresa
+        email
+        telefono
+      }
+      vendedor
+      total
+      estado
+    }
+  }
+`;
+
   const router = useRouter();
   const [mensaje, setMensaje] = useState(null);
   //Utilizar context y extraer sus valores
   const pedidoContext = useContext(PedidoContext);
   const { cliente, productos, total } = pedidoContext;
 
-  const [nuevoPedido] = useMutation(NUEVO_PEDIDO);
+  const [nuevoPedido] = useMutation(NUEVO_PEDIDO, {
+    update(cache, { data: { nuevoPedido } }){
+      const {obtenerPedidosVendedor} = cache.readQuery({
+        query: OBTENER_PEDIDOS
+      });
+
+      cache.writeQuery({
+        query: OBTENER_PEDIDOS,
+        data: {
+          obtenerPedidosVendedor: [...obtenerPedidosVendedor, nuevoPedido]
+        }
+      })
+    }
+  });
 
   const validarPedido = () => {
     return !productos.every(producto=> producto.cantidad > 0 ) || total === 0 || cliente.length == 0 ? 'opacity-50 cursor-not-allowed' : '' ;
