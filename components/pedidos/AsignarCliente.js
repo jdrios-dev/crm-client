@@ -40,16 +40,16 @@ const AsignarCliente = () => {
 
   return (
     <>
-    <p className='mt-10 my-2 bg-white border-l-4 border-gray-800 text-gray-700 p-2 text-sm font-bold'>1. - Asigna un Cliente al pedido</p>
-      <Select
-      className='mt-2'
-      options={obtenerClientesVendedor}
-      onChange={(clientes)=>{ seleccionarCliente(clientes) }}
-      getOptionValue={ (clientes)=> clientes.id }
-      getOptionLabel={ (clientes)=> clientes.nombre }
-      placeholder='Seleccione un cliente'
-      noOptionsMessage={()=>'No hay resultados'}
-      //
+      <p className='mt-10 my-2 bg-white border-l-4 border-gray-800 text-gray-700 p-2 text-sm font-bold'>1. - Asigna un Cliente al pedido</p>
+        <Select
+        className='mt-2'
+        options={obtenerClientesVendedor}
+        onChange={(clientes)=>{ seleccionarCliente(clientes) }}
+        getOptionValue={ (clientes)=> clientes.id }
+        getOptionLabel={ (clientes)=> clientes.nombre }
+        placeholder='Seleccione un cliente'
+        noOptionsMessage={()=>'No hay resultados'}
+        //
       />
     </>
   )
