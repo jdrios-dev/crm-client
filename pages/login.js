@@ -44,8 +44,10 @@ const login = () => {
             }
           }
         });
-        const {token} = data.autenticarUsuario;
-        localStorage.setItem('token-crm', token);
+        setTimeout(() => {
+          const {token} = data.autenticarUsuario;
+          localStorage.setItem('token-crm', token);
+        }, 1000);
         router.push('/');
       } catch (error) {
         setMensaje(error.message);

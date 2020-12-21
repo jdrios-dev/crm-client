@@ -81,10 +81,6 @@ const NuevoProducto = () => {
             }
           }
         });
-
-        // console.log(data);
-
-        // Mostrar una alerta
         Swal.fire(
           'Creado',
           'Se creó el producto correctamente',

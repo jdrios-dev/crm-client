@@ -23,9 +23,6 @@ const Index = () => {
 	// Consulta de Apollo
 	const { data, loading, error } = useQuery(OBTENER_CLIENTES_USUARIO);
 
-	// console.log(data)
-	// console.log(loading)
-	// console.log(error)
 
 	if (loading) return 'Cargando....';
 
@@ -41,7 +38,7 @@ const Index = () => {
 					<a className="bg-green-600 px-4 py-1 text-white text-xs rounded hover:bg-green-700 inline-block mt-5">Nuevo Cliente</a>
 				</Link>
 
-				<div className="">
+				<div className="overflow-x-scroll">
 					<table className="table-auto shadow-md mt-10 w-full w-lg">
 						<thead className="bg-gray-800">
 							<tr className="text-white">
